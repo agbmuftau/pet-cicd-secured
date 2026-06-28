@@ -1,0 +1,49 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE
+.vscode
+.idea
+*.iml
+*.swp
+*.swo
+*~
+
+# Build
+target/
+build/
+dist/
+.gradle
+.m2
+
+# Dependencies
+node_modules/
+vendor/
+
+# Testing
+.pytest_cache
+coverage/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# CI/CD
+.github
+.gitlab-ci.yml
+.circleci
+
+# Documentation
+README.md
+docs/
