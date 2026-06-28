@@ -1,48 +1,43 @@
-HELP.md
-pom.xml.bak
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
-.gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+# Git
+.git
+.gitignore
+.gitattributes
 
-### STS ###
-.attach_pid*
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+# GitHub
+.github
 
-### IntelliJ IDEA ###
+# IDE
 .idea
-*.iws
 *.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
+.vscode
+*.swp
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# Gradle (project uses Maven)
+.gradle
+gradle/
+gradlew
+gradlew.bat
+build.gradle
+settings.gradle
 
-### VS Code ###
-.vscode/
+# Maven build output (builder stage copies src and builds fresh)
+target/
 
-### CSS ###
-_site/
-*.css
-!petclinic.css
+# Docs & tests (not needed in image)
+README.md
+LICENSE.txt
+src/test/
+src/checkstyle/
+src/main/scss/
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Kubernetes (not relevant for Docker build)
+k8s/
