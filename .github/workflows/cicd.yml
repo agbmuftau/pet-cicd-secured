@@ -15,7 +15,7 @@ env:
   ECR_REPOSITORY:    ${{ secrets.ECR_REPOSITORY }}
   ECS_CLUSTER:       ${{ secrets.ECS_CLUSTER }}
   ECS_SERVICE:       ${{ secrets.ECS_SERVICE }}
-  CONTAINER_NAME:    petcicd:1           # Must match the name in your ECS task definition
+  CONTAINER_NAME:    pet_cicd_pipeline-9ef1   # Must match the name in your ECS task definition
   IMAGE_TAG:         ${{ github.sha }}
 
 # Cancel in-progress runs for the same branch/PR
