@@ -15,7 +15,7 @@ env:
   ECR_REPOSITORY:    ${{ secrets.ECR_REPOSITORY }}
   ECS_CLUSTER:       ${{ secrets.ECS_CLUSTER }}
   ECS_SERVICE:       ${{ secrets.ECS_SERVICE }}
-  CONTAINER_NAME:    petclinic           # Must match the name in your ECS task definition
+  CONTAINER_NAME:    pet_cicd_pipeline-9ef1   # Must match the name in your ECS task definition
   IMAGE_TAG:         ${{ github.sha }}
 
 # Cancel in-progress runs for the same branch/PR
@@ -142,7 +142,7 @@ jobs:
     name: 🚀 Deploy to ECS
     runs-on: ubuntu-latest
     needs: docker-build-push
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/petclinicay')
 
     steps:
       - name: Checkout code
@@ -155,10 +155,29 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region:            ${{ env.AWS_REGION }}
 
+      - name: Get current ECS task definition ARN
+        id: task-def-arn
+        run: |
+          set -euo pipefail
+          TASK_DEF_ARN=$(aws ecs describe-services \
+            --cluster "$ECS_CLUSTER" \
+            --services "$ECS_SERVICE" \
+            --query 'services[0].taskDefinition' \
+            --output text)
+
+          if [ -z "$TASK_DEF_ARN" ] || [ "$TASK_DEF_ARN" = "None" ]; then
+            echo "No task definition found for service $ECS_SERVICE in cluster $ECS_CLUSTER"
+            exit 1
+          fi
+
+          echo "task_definition_arn=$TASK_DEF_ARN" >> "$GITHUB_OUTPUT"
+          echo "📋 Using task definition: $TASK_DEF_ARN"
+
       - name: Download current ECS task definition
         run: |
+          set -euo pipefail
           aws ecs describe-task-definition \
-            --task-definition $CONTAINER_NAME \
+            --task-definition "${{ steps.task-def-arn.outputs.task_definition_arn }}" \
             --query taskDefinition \
             > task-definition.json
           echo "📋 Task definition downloaded"
