@@ -159,14 +159,23 @@ jobs:
         id: task-def-arn
         run: |
           set -euo pipefail
+          # Sanitize service name: if secret includes a tag (contains ':'), strip everything after ':'
+          SERVICE_NAME="${ECS_SERVICE%%:*}"
+
+          # Validate service name against AWS allowed pattern
+          if ! echo "$SERVICE_NAME" | grep -E -q '^[a-zA-Z0-9\-_]{1,255}$'; then
+            echo "ECS service name \"$SERVICE_NAME\" is invalid. It must match ^[a-zA-Z0-9\\-_]{1,255}$"
+            exit 1
+          fi
+
           TASK_DEF_ARN=$(aws ecs describe-services \
             --cluster "$ECS_CLUSTER" \
-            --services "$ECS_SERVICE" \
+            --services "$SERVICE_NAME" \
             --query 'services[0].taskDefinition' \
             --output text)
 
           if [ -z "$TASK_DEF_ARN" ] || [ "$TASK_DEF_ARN" = "None" ]; then
-            echo "No task definition found for service $ECS_SERVICE in cluster $ECS_CLUSTER"
+            echo "No task definition found for service $SERVICE_NAME in cluster $ECS_CLUSTER"
             exit 1
           fi
 
