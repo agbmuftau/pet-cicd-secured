@@ -20,9 +20,6 @@ java {
   }
 }
 
-repositories {
-  mavenCentral()
-}
 
 ext.checkstyleVersion = "12.3.1"
 ext.springJavaformatCheckstyleVersion = "0.0.47"
